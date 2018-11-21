@@ -1,0 +1,13 @@
+[Unit]
+Description=Confluent Control Center
+Documentation=https://docs.confluent.io/current/control-center/docs/
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/control-center-start /etc/confluent-control-center/control-center.properties
+ExecStop=/usr/bin/control-center-stop
+
+[Install]
+WantedBy=multi-user.target
