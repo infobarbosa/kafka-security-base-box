@@ -1,6 +1,6 @@
-192.168.56.11  zookeeper zookeeper1 zookeeper1.infobarbosa.github.com
-192.168.56.12  kafka kafka1 kafka1.infobarbosa.github.com
-192.168.56.13  controlcenter control-center confluent-control-center control-center.infobarbosa.github.com
-192.168.56.14  kafka-client kafka-client.infobarbosa.github.com
-192.168.56.15  ca ca.infobarbosa.github.com
-192.168.56.16  kerberos kerberos.infobarbosa.github.com
+192.168.56.11  zookeeper1.infobarbosa.github.com zookeper1
+192.168.56.12  kafka1.infobarbosa.github.com kafka1
+192.168.56.13  control-center.infobarbosa.github.com control-center
+192.168.56.14  kafka-client.infobarbosa.github.com kafka-client
+192.168.56.15  ca.infobarbosa.github.com ca
+192.168.56.16  kerberos.infobarbosa.github.com kerberos 
