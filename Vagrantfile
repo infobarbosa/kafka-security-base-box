@@ -144,9 +144,8 @@ Vagrant.configure("2") do |config|
     ca.vm.provision "file", source: "hosts", destination: "hosts"
     ca.vm.provision "shell", inline: <<-SHELL
       sudo cat hosts >> /etc/hosts
-      #sudo add-apt-repository ppa:openjdk-r/ppa
-      #sudo apt-get -y update && sudo apt-get install -y openjdk-8-jdk
 
+      #Gerando uma autoridade certificadora (CA)
       mkdir ssl
       openssl req -new -newkey rsa:4096 -days 365 -x509 -subj "/CN=Kafka-Security-CA" -keyout ssl/ca-key -out ssl/ca-cert -nodes
 
