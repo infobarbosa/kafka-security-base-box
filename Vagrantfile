@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
     zookeeper1.vm.provider "virtualbox" do |v|
       v.memory = 1024
       v.cpus = 1
-      v.name = "zk1"
+      v.name = "zookeeper-lab-security.vagrant"
     end
 
     zookeeper1.vm.provision "file", source: "zookeeper.service", destination: "zookeeper.service"
@@ -45,7 +45,7 @@ Vagrant.configure("2") do |config|
     kafka1.vm.provider "virtualbox" do |v|
       v.memory = 1536
       v.cpus = 1
-      v.name = "k1"
+      v.name = "kafka-lab-security.vagrant"
     end
 
     kafka1.vm.provision "file", source: "kafka.service", destination: "kafka.service"
@@ -80,7 +80,7 @@ Vagrant.configure("2") do |config|
     controlcenter.vm.provider "virtualbox" do |v|
       v.memory = 2048
       v.cpus = 1
-      v.name = "confluent-control-center"
+      v.name = "control-center-lab-security.vagrant"
     end
 
     controlcenter.vm.provision "file", source: "control-center.service", destination: "control-center.service"
@@ -114,7 +114,7 @@ Vagrant.configure("2") do |config|
     client.vm.provider "virtualbox" do |v|
       v.memory = 512
       v.cpus = 1
-      v.name = "kafka-client"
+      v.name = "kafka-client-lab-security.vagrant"
     end
 
     client.vm.provision "file", source: "hosts", destination: "hosts"
@@ -138,7 +138,7 @@ Vagrant.configure("2") do |config|
     ca.vm.provider "virtualbox" do |v|
       v.memory = 512
       v.cpus = 1
-      v.name = "ca"
+      v.name = "ca-lab-security.vagrant"
     end
 
     ca.vm.provision "file", source: "hosts", destination: "hosts"
@@ -151,48 +151,48 @@ Vagrant.configure("2") do |config|
   end
 
   #configuracao da instancia do kerberos
-#  config.vm.define "kerberos" do |kerberos|
-#    kerberos.vm.box = "centos/7"
-#
-#    kerberos.vm.network "private_network", ip: "192.168.56.16"
-#    kerberos.vm.hostname = "kerberos.infobarbosa.github.com"
-#    kerberos.vm.provider "virtualbox" do |v|
-#      v.memory = 512
-#      v.cpus = 1
-#      v.name = "kerberos"
-#    end
-#
-#    kerberos.vm.provision "file", source: "kdc.conf", destination: "kdc.conf"
-#    kerberos.vm.provision "file", source: "kadm5.acl", destination: "kadm5.acl"
-#    kerberos.vm.provision "file", source: "krb5.conf", destination: "krb5.conf"
-#    kerberos.vm.provision "file", source: "hosts", destination: "hosts"
-#    kerberos.vm.provision "shell", inline: <<-SHELL
-#      sudo yum install -y krb5-server
-#      sudo systemctl restart firewalld
-#      sudo firewall-cmd --permanent --add-port=88/tcp
-#      sudo firewall-cmd --reload
-#      sudo cat hosts >> /etc/hosts
-#
-#      sudo chown root:root kdc.conf
-#      sudo chown root:root kadm5.acl
-#      sudo chown root:root krb5.conf
-#      sudo chmod 644 kdc.conf
-#      sudo chmod 644 kadm5.acl
-#      sudo chmod 644 krb5.conf
-#      sudo mv kdc.conf /var/kerberos/krb5kdc/
-#      sudo mv kadm5.acl /var/kerberos/krb5kdc/
-#      sudo mv krb5.conf /etc/
-#
-#      export REALM="KAFKA.SECURE"
-#      export ADMINPW="this-is-unsecure"
-#
-#      sudo /usr/sbin/kdb5_util create -s -r KAFKA.SECURE -P this-is-unsecure
-#      sudo kadmin.local -q "add_principal -pw this-is-unsecure admin/admin"
-#
-#      sudo systemctl restart krb5kdc
-#      sudo systemctl restart kadmin
-#
-#    SHELL
-#  end
+  config.vm.define "kerberos" do |kerberos|
+    kerberos.vm.box = "centos/7"
+
+    kerberos.vm.network "private_network", ip: "192.168.56.16"
+    kerberos.vm.hostname = "kerberos.infobarbosa.github.com"
+    kerberos.vm.provider "virtualbox" do |v|
+      v.memory = 512
+      v.cpus = 1
+      v.name = "kerberos-lab-security.vagrant"
+    end
+
+    kerberos.vm.provision "file", source: "kdc.conf", destination: "kdc.conf"
+    kerberos.vm.provision "file", source: "kadm5.acl", destination: "kadm5.acl"
+    kerberos.vm.provision "file", source: "krb5.conf", destination: "krb5.conf"
+    kerberos.vm.provision "file", source: "hosts", destination: "hosts"
+    kerberos.vm.provision "shell", inline: <<-SHELL
+      sudo cat hosts >> /etc/hosts
+      sudo yum install -y krb5-server
+      sudo systemctl restart firewalld
+      sudo firewall-cmd --permanent --add-port=88/tcp
+      sudo firewall-cmd --reload
+
+      sudo chown root:root kdc.conf
+      sudo chown root:root kadm5.acl
+      sudo chown root:root krb5.conf
+      sudo chmod 644 kdc.conf
+      sudo chmod 644 kadm5.acl
+      sudo chmod 644 krb5.conf
+      sudo cp kdc.conf /var/kerberos/krb5kdc/
+      sudo cp kadm5.acl /var/kerberos/krb5kdc/
+      sudo cp krb5.conf /etc/
+
+      export REALM="KAFKA.SECURE"
+      export ADMINPW="this-is-unsecure"
+
+      sudo /usr/sbin/kdb5_util create -s -r KAFKA.SECURE -P this-is-unsecure
+      sudo kadmin.local -q "add_principal -pw this-is-unsecure admin/admin"
+
+      sudo systemctl restart krb5kdc
+      sudo systemctl restart kadmin
+
+    SHELL
+  end
 
 end
