@@ -17,6 +17,7 @@ Vagrant.configure("2") do |config|
     zookeeper1.vm.provision "file", source: "zookeeper.service", destination: "zookeeper.service"
     zookeeper1.vm.provision "file", source: "hosts", destination: "hosts"
     zookeeper1.vm.provision "shell", inline: <<-SHELL
+      sudo cat hosts >> /etc/hosts
 
       sudo add-apt-repository ppa:openjdk-r/ppa
       sudo apt-get -y update && sudo apt-get install -y openjdk-8-jdk
@@ -25,8 +26,6 @@ Vagrant.configure("2") do |config|
       sudo apt-get -y update && sudo apt-get install -y confluent-platform-2.11
 
       sudo ufw allow 2181/tcp
-
-      sudo cat hosts >> /etc/hosts
 
       sudo cp zookeeper.service /etc/systemd/system/zookeeper.service
       chown root:root /etc/systemd/system/zookeeper.service
@@ -52,6 +51,7 @@ Vagrant.configure("2") do |config|
     kafka1.vm.provision "file", source: "server1.properties", destination: "server.properties"
     kafka1.vm.provision "file", source: "hosts", destination: "hosts"
     kafka1.vm.provision "shell", inline: <<-SHELL
+      sudo cat hosts >> /etc/hosts
       sudo add-apt-repository ppa:openjdk-r/ppa
       sudo apt-get -y update && sudo apt-get install -y openjdk-8-jdk
       wget -qO - https://packages.confluent.io/deb/5.0/archive.key | apt-key add -
@@ -61,7 +61,6 @@ Vagrant.configure("2") do |config|
       sudo ufw allow 9092/tcp
       sudo ufw allow 9999/tcp
 
-      sudo cat hosts >> /etc/hosts
       sudo mv server.properties /etc/kafka/server.properties
 
       sudo cp kafka.service /etc/systemd/system/kafka.service
@@ -87,6 +86,8 @@ Vagrant.configure("2") do |config|
     controlcenter.vm.provision "file", source: "control-center.properties", destination: "control-center.properties"
     controlcenter.vm.provision "file", source: "hosts", destination: "hosts"
     controlcenter.vm.provision "shell", inline: <<-SHELL
+
+      sudo cat hosts >> /etc/hosts
       sudo add-apt-repository ppa:openjdk-r/ppa
       sudo apt-get -y update && sudo apt-get install -y openjdk-8-jdk
       wget -qO - https://packages.confluent.io/deb/5.0/archive.key | apt-key add -
@@ -94,8 +95,6 @@ Vagrant.configure("2") do |config|
       sudo apt-get -y update && sudo apt-get install -y confluent-platform-2.11
 
       sudo ufw allow 9021/tcp
-
-      sudo cat hosts >> /etc/hosts
       sudo mv control-center.properties /etc/confluent-control-center/control-center.properties
 
       sudo cp control-center.service /etc/systemd/system/control-center.service
@@ -121,11 +120,12 @@ Vagrant.configure("2") do |config|
     client.vm.provision "file", source: "consumer.jar", destination: "consumer.jar"
     client.vm.provision "file", source: "producer.jar", destination: "producer.jar"
     client.vm.provision "shell", inline: <<-SHELL
+      sudo cat hosts >> /etc/hosts
       sudo add-apt-repository ppa:openjdk-r/ppa
       sudo apt-get -y update && sudo apt-get install -y openjdk-8-jdk
       sudo echo "BOOTSTRAP_SERVERS_CONFIG=kafka1.infobarbosa.github.com:9092" >> /etc/profile
+      export BOOTSTRAP_SERVERS_CONFIG=$BOOTSTRAP_SERVERS_CONFIG
 
-      sudo cat hosts >> /etc/hosts
     SHELL
   end
 
