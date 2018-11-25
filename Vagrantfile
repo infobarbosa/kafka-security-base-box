@@ -123,7 +123,7 @@ Vagrant.configure("2") do |config|
     client.vm.provision "shell", inline: <<-SHELL
       sudo add-apt-repository ppa:openjdk-r/ppa
       sudo apt-get -y update && sudo apt-get install -y openjdk-8-jdk
-      sudo echo "BOOTSTRAP_SERVERS_CONFIG=kafka1:9092" >> /etc/profile
+      sudo echo "BOOTSTRAP_SERVERS_CONFIG=kafka1.infobarbosa.github.com:9092" >> /etc/profile
 
       sudo cat hosts >> /etc/hosts
     SHELL
