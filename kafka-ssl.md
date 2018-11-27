@@ -39,7 +39,7 @@ cp cert-file /vagrant/
 ```
 export SRVPASS=serversecret
 
-sudo openssl x509 -req -CA ca-cert -CAkey ca-key -in /vagrant/cert-file -out /vagrant/cert-signed -days 365 -CAcreateserial -passin pass:$SRVPASS
+sudo openssl x509 -req -CA ~/ssl/ca-cert -CAkey ~/ssl/ca-key -in /vagrant/cert-file -out /vagrant/cert-signed -days 365 -CAcreateserial -passin pass:$SRVPASS
 ```
 
 ############################################################################
