@@ -70,6 +70,9 @@ Vagrant.configure("2") do |config|
       sudo chown root:root /etc/systemd/system/kafka.service
       sudo systemctl enable kafka
       sudo systemctl start kafka
+
+      #criacao do topico de teste
+      kafka-topics --zookeeper zookeeper1.infobarbosa.github.com:2181/kafka --create --topic --teste --partitions 10 --replication-factor 1
     SHELL
   end
 
@@ -126,8 +129,12 @@ Vagrant.configure("2") do |config|
       sudo add-apt-repository ppa:openjdk-r/ppa
       sudo apt-get -y update && sudo apt-get install -y openjdk-8-jdk
       sudo apt-get install -y maven
+
       git clone https://github.com/infobarbosa/kafka-producer-tutorial
       git clone https://github.com/infobarbosa/kafka-consumer-tutorial
+
+      sudo chown vagrant:vagrant -R kafka-producer-tutorial
+      sudo chown vagrant:vagrant -R kafka-consumer-tutorial
 
       sudo echo "export BOOTSTRAP_SERVERS_CONFIG=kafka1.infobarbosa.github.com:9092" >> /etc/profile
 
