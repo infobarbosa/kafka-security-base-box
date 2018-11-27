@@ -1,4 +1,7 @@
 *.log
 .vagrant
+ca-cert
+cert-file
+cert-signed
 Kafka-Security-master
 code-v3.zip
