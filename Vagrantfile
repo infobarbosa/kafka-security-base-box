@@ -16,6 +16,7 @@ Vagrant.configure("2") do |config|
 
     zookeeper1.vm.provision "file", source: "zookeeper.service", destination: "zookeeper.service"
     zookeeper1.vm.provision "file", source: "hosts", destination: "hosts"
+
     zookeeper1.vm.provision "shell", inline: <<-SHELL
       sudo cat hosts >> /etc/hosts
 
@@ -50,8 +51,10 @@ Vagrant.configure("2") do |config|
     kafka1.vm.provision "file", source: "kafka.service", destination: "kafka.service"
     kafka1.vm.provision "file", source: "server1.properties", destination: "server.properties"
     kafka1.vm.provision "file", source: "hosts", destination: "hosts"
+
     kafka1.vm.provision "shell", inline: <<-SHELL
       sudo cat hosts >> /etc/hosts
+
       sudo add-apt-repository ppa:openjdk-r/ppa
       sudo apt-get -y update && sudo apt-get install -y openjdk-8-jdk
       wget -qO - https://packages.confluent.io/deb/5.0/archive.key | apt-key add -
@@ -85,9 +88,10 @@ Vagrant.configure("2") do |config|
     controlcenter.vm.provision "file", source: "control-center.service", destination: "control-center.service"
     controlcenter.vm.provision "file", source: "control-center.properties", destination: "control-center.properties"
     controlcenter.vm.provision "file", source: "hosts", destination: "hosts"
-    controlcenter.vm.provision "shell", inline: <<-SHELL
 
+    controlcenter.vm.provision "shell", inline: <<-SHELL
       sudo cat hosts >> /etc/hosts
+
       sudo add-apt-repository ppa:openjdk-r/ppa
       sudo apt-get -y update && sudo apt-get install -y openjdk-8-jdk
       wget -qO - https://packages.confluent.io/deb/5.0/archive.key | apt-key add -
@@ -117,14 +121,15 @@ Vagrant.configure("2") do |config|
     end
 
     client.vm.provision "file", source: "hosts", destination: "hosts"
-    client.vm.provision "file", source: "consumer.jar", destination: "consumer.jar"
-    client.vm.provision "file", source: "producer.jar", destination: "producer.jar"
     client.vm.provision "shell", inline: <<-SHELL
       sudo cat hosts >> /etc/hosts
       sudo add-apt-repository ppa:openjdk-r/ppa
       sudo apt-get -y update && sudo apt-get install -y openjdk-8-jdk
-      sudo echo "BOOTSTRAP_SERVERS_CONFIG=kafka1.infobarbosa.github.com:9092" >> /etc/profile
-      export BOOTSTRAP_SERVERS_CONFIG=$BOOTSTRAP_SERVERS_CONFIG
+      sudo apt-get install -y maven
+      git clone https://github.com/infobarbosa/kafka-producer-tutorial
+      git clone https://github.com/infobarbosa/kafka-consumer-tutorial
+
+      sudo echo "export BOOTSTRAP_SERVERS_CONFIG=kafka1.infobarbosa.github.com:9092" >> /etc/profile
 
     SHELL
   end
@@ -142,6 +147,7 @@ Vagrant.configure("2") do |config|
     end
 
     ca.vm.provision "file", source: "hosts", destination: "hosts"
+
     ca.vm.provision "shell", inline: <<-SHELL
       sudo cat hosts >> /etc/hosts
 
@@ -168,8 +174,10 @@ Vagrant.configure("2") do |config|
     kerberos.vm.provision "file", source: "kadm5.acl", destination: "kadm5.acl"
     kerberos.vm.provision "file", source: "krb5.conf", destination: "krb5.conf"
     kerberos.vm.provision "file", source: "hosts", destination: "hosts"
+
     kerberos.vm.provision "shell", inline: <<-SHELL
       sudo cat hosts >> /etc/hosts
+
       sudo yum install -y krb5-server
       sudo systemctl restart firewalld
       sudo firewall-cmd --permanent --add-port=88/tcp
