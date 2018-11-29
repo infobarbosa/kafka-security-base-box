@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
     end
 
     kafka1.vm.provision "file", source: "kafka.service", destination: "kafka.service"
-    kafka1.vm.provision "file", source: "server1.properties", destination: "server.properties"
+    kafka1.vm.provision "file", source: "server.properties", destination: "server.properties"
     kafka1.vm.provision "file", source: "hosts", destination: "hosts"
 
     kafka1.vm.provision "shell", inline: <<-SHELL
@@ -72,7 +72,7 @@ Vagrant.configure("2") do |config|
       sudo systemctl start kafka
 
       #criacao do topico de teste
-      kafka-topics --zookeeper zookeeper1.infobarbosa.github.com:2181/kafka --create --topic --teste --partitions 10 --replication-factor 1
+      kafka-topics --zookeeper zookeeper1.infobarbosa.github.com:2181/kafka --create --topic teste --partitions 10 --replication-factor 1
     SHELL
   end
 
