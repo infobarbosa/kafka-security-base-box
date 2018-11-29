@@ -81,7 +81,7 @@ sudo systemctl status kafka
 ```
 # Verify Broker startup
 ```
-sudo grep "EndPoint" /home/vagrant/kafka/logs/server.log
+sudo grep "EndPoint" /var/log/kafka/server.log
 ```
 
 # Verify SSL config from your local computer
@@ -109,11 +109,26 @@ keytool -keystore kafka.client.truststore.jks -alias CARoot -import -file ca-cer
 keytool -list -v -keystore kafka.client.truststore.jks
 ```
 
-## crie um arquivo client.properties com as seguintes configuracoes para SSL
+## Abrir a classe ProducerTutorial.java e ajustar a classe de propriedades com as seguintes informacoes
 ```
 security.protocol=SSL
 ssl.truststore.location=/home/vagrant/ssl/kafka.client.truststore.jks
 ssl.truststore.password=clientpass
+
+## 1. abrir no vi
+vi src/main/java/com/github/infobarbosa/kafka/ProducerTutorial.java
+## 2. acrescentar as linhas abaixo
+properties.put("security.protocol", "SSL");
+properties.put("ssl.truststore.location", "/home/vagrant/ssl/kafka.client.truststore.jks");
+properties.put("ssl.truststore.password", "clientpass");
+
+## 3. salvar e fechar
+## 4. empacotar o projeto
+mvn clean package
+
+## 5. exportar o listener do kafka na porta 9093
+export BOOTSTRAP_SERVERS_CONFIG=kafka1.infobarbosa.github.com:9093
+
 ```
 
 ## TEST
