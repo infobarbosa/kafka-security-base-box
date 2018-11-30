@@ -12,13 +12,17 @@ public class SslProducer {
 
     public static void main(String[] args) {
         Properties properties = new Properties();
-        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka1.infobarbosa.github.com:9092");
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka1.infobarbosa.github.com:9093");
         properties.put(ProducerConfig.ACKS_CONFIG, "all");
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.put(ProducerConfig.CLIENT_ID_CONFIG, "producer-tutorial");
         properties.put(ProducerConfig.LINGER_MS_CONFIG, "100");
         properties.put(ProducerConfig.RETRIES_CONFIG, "3");
+        properties.put("security.protocol", "SSL");
+        properties.put("ssl.truststore.location", "/home/vagrant/ssl/kafka.client.truststore.jks");
+        properties.put("ssl.truststore.password", "clientpass");
+
 
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
         final String topic = "teste";
