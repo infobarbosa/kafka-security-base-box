@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.infobarbosa</groupId>
-    <artifactId>kafka-consumer-tutorial</artifactId>
+    <artifactId>kafka-consumer</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <url>http://maven.apache.org</url>
@@ -72,7 +72,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.github.infobarbosa.kafka.ConsumerTutorial</mainClass>
+                            <mainClass>com.github.infobarbosa.kafka.SslConsumer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
