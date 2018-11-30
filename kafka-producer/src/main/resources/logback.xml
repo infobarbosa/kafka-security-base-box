@@ -29,6 +29,7 @@
     <logger name="com.github.infobarbosa.kafka" level="debug"
             additivity="false">
         <appender-ref ref="FILE-AUDIT" />
+        <appender-ref ref="CONSOLE"/>
     </logger>
 
     <root level="debug">
