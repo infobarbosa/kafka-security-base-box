@@ -37,8 +37,7 @@ public class PlaintextProducer {
                         logger.error("Erro processando a mensagem "  + key, exception.getMessage());
                     else
                         logger.info("K: " + key
-                                + ". P: " + metadata.partition()
-                                + ". OS: " + metadata.offset()
+                                + ". V: " + value
                                 + ". TS: " + metadata.timestamp()
                         );
                 }

@@ -31,7 +31,7 @@ public class SslProducer {
 
         for(int i=0; i < 100000; i++){
             String key = "key " + i;
-            String value = "Encripted value " + i + " at ts " + System.currentTimeMillis();
+            String value = "SSL Encripted value " + i + " at ts " + System.currentTimeMillis();
 
             record = new ProducerRecord<>(topic, key, value);
             producer.send(record, new Callback() {
@@ -41,8 +41,7 @@ public class SslProducer {
                         logger.error("Erro processando a mensagem "  + key, exception.getMessage());
                     else
                         logger.info("K: " + key
-                                + ". P: " + metadata.partition()
-                                + ". OS: " + metadata.offset()
+                                + ". V: " + value
                                 + ". TS: " + metadata.timestamp()
                         );
                 }
