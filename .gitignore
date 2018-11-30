@@ -2,6 +2,7 @@
 *.log
 *.iml
 .idea
+*/target
 .vagrant
 ca-cert
 cert-file
