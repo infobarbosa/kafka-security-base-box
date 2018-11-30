@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
       v.name = "zookeeper-lab-security.vagrant"
     end
 
-    zookeeper1.vm.provision "file", source: "zookeeper.service", destination: "zookeeper.service"
+    zookeeper1.vm.provision "file", source: "daemons/zookeeper.service", destination: "zookeeper.service"
     zookeeper1.vm.provision "file", source: "hosts", destination: "hosts"
 
     zookeeper1.vm.provision "shell", inline: <<-SHELL
@@ -48,8 +48,8 @@ Vagrant.configure("2") do |config|
       v.name = "kafka-lab-security.vagrant"
     end
 
-    kafka1.vm.provision "file", source: "kafka.service", destination: "kafka.service"
-    kafka1.vm.provision "file", source: "server.properties", destination: "server.properties"
+    kafka1.vm.provision "file", source: "daemons/kafka.service", destination: "kafka.service"
+    kafka1.vm.provision "file", source: "property-files/server.properties", destination: "server.properties"
     kafka1.vm.provision "file", source: "hosts", destination: "hosts"
 
     kafka1.vm.provision "shell", inline: <<-SHELL
@@ -88,8 +88,8 @@ Vagrant.configure("2") do |config|
       v.name = "control-center-lab-security.vagrant"
     end
 
-    controlcenter.vm.provision "file", source: "control-center.service", destination: "control-center.service"
-    controlcenter.vm.provision "file", source: "control-center.properties", destination: "control-center.properties"
+    controlcenter.vm.provision "file", source: "daemons/control-center.service", destination: "control-center.service"
+    controlcenter.vm.provision "file", source: "property-files/control-center.properties", destination: "control-center.properties"
     controlcenter.vm.provision "file", source: "hosts", destination: "hosts"
 
     controlcenter.vm.provision "shell", inline: <<-SHELL
@@ -177,9 +177,9 @@ Vagrant.configure("2") do |config|
       v.name = "kerberos-lab-security.vagrant"
     end
 
-    kerberos.vm.provision "file", source: "kdc.conf", destination: "kdc.conf"
-    kerberos.vm.provision "file", source: "kadm5.acl", destination: "kadm5.acl"
-    kerberos.vm.provision "file", source: "krb5.conf", destination: "krb5.conf"
+    kerberos.vm.provision "file", source: "kerberos-configs/kdc.conf", destination: "kdc.conf"
+    kerberos.vm.provision "file", source: "kerberos-configs/kadm5.acl", destination: "kadm5.acl"
+    kerberos.vm.provision "file", source: "kerberos-configs/krb5.conf", destination: "krb5.conf"
     kerberos.vm.provision "file", source: "hosts", destination: "hosts"
 
     kerberos.vm.provision "shell", inline: <<-SHELL
