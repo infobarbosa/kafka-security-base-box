@@ -1,5 +1,7 @@
 .DS_Store
 *.log
+*.iml
+.idea
 .vagrant
 ca-cert
 cert-file
