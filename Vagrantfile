@@ -130,8 +130,8 @@ Vagrant.configure("2") do |config|
       sudo apt-get -y update && sudo apt-get install -y openjdk-8-jdk
       sudo apt-get install -y maven
 
-      git clone https://github.com/infobarbosa/kafka-producer-tutorial
-      git clone https://github.com/infobarbosa/kafka-consumer-tutorial
+      ln -s /vagrant/kafka-producer/ kafka-producer
+      ln -s /vagrant/kafka-consumer/ kafka-consumer
 
       sudo chown vagrant:vagrant -R kafka-producer-tutorial
       sudo chown vagrant:vagrant -R kafka-consumer-tutorial
