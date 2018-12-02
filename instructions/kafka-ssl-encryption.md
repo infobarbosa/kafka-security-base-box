@@ -3,7 +3,12 @@
 Esse laboratorio tem por objetivo exercitar a feature de encriptação do Kafka.<br/>
 Nele vamos primeiramente testar as nossas aplicações clientes e constatar quanto inseguro é o tráfego de dados via texto puro.
 
-## Fazendo o primeiro teste em plaintext
+Se ainda não tiver subido o laboratório, essa é a hora:
+```
+vagrant up
+```
+
+## Primeiro teste (PLAINTEXT)
 
 #### Janela 1
 ```
@@ -246,7 +251,7 @@ ssl.truststore.password=clientpass
 ```
 Obviamente essas e outras propriedades não devem ser hard coded. Como boa prática devem ser injetadas via arquivo de configuração ou variáveis de ambiente.
 
-## Testando tudo!
+## Segundo teste (SSL)
 
 Vamos refazer o teste. Desta vez, utilizando as classes produtora e consumidora que já apontam para o kafka1 na porta 9093
 #### Janela 1
