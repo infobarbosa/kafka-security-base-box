@@ -71,6 +71,10 @@ Vagrant.configure("2") do |config|
       sudo systemctl enable kafka
       sudo systemctl start kafka
 
+      #dorme uns segundos para dar tempo do servico do kafka subir
+      #nao me critique! eu poderia colocar um teste da porta do kafka aqui, mas nao to afim.
+      sleep 60
+
       #criacao do topico de teste
       kafka-topics --zookeeper zookeeper1.infobarbosa.github.com:2181/kafka --create --topic teste --partitions 10 --replication-factor 1
     SHELL
@@ -133,8 +137,13 @@ Vagrant.configure("2") do |config|
       ln -s /vagrant/kafka-producer/ kafka-producer
       ln -s /vagrant/kafka-consumer/ kafka-consumer
 
-      sudo chown vagrant:vagrant -R kafka-producer-tutorial
-      sudo chown vagrant:vagrant -R kafka-consumer-tutorial
+      #build do projeto producer
+      cd ~/kafka-producer
+      mvn clean package
+
+      #build do projeto consumer
+      cd ~/kafka-consumer
+      mvn clean package
 
       sudo echo "export BOOTSTRAP_SERVERS_CONFIG=kafka1.infobarbosa.github.com:9092" >> /etc/profile
 
@@ -162,6 +171,8 @@ Vagrant.configure("2") do |config|
       mkdir ssl
       openssl req -new -newkey rsa:4096 -days 365 -x509 -subj "/CN=Kafka-Security-CA" -keyout ssl/ca-key -out ssl/ca-cert -nodes
 
+      #copiando a chave publica para o diretorio /vagrant
+      cp ssl/ca-cert /vagrant/ca-cert
     SHELL
   end
 
