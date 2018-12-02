@@ -1,4 +1,4 @@
-#Kafka Security | Base Box
+# Kafka Security | Base Box
 
 Este projeto tem como objetivo exercitar as features de segurança do Kafka.<br/>
 Normalmente são esperadas três níveis de segurança: encriptação, autenticação e autorização.<br/>
