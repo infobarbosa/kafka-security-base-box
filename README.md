@@ -10,7 +10,7 @@ Com o laboratório pretendo simular um cenário onde há basicamente três atore
 - Administrador: profissional responsável pela administração do ambiente Kafka;
 - Segurança: profissional responsável pelo manejo de credenciais e permissões de segurança da empresa.
 
-Para tanto, o conteúdo do laboratório possui algumas imagens Linux que sobem via [Vagrant](../Vagrantfile):
+Para tanto, o conteúdo do laboratório possui algumas imagens Linux que sobem via [Vagrant](https://github.com/infobarbosa/kafka-security-base-box/blob/master/Vagrantfile):
 - Zookeeper;
 - Kafka;
 - Aplicação cliente: imagem Linux com duas aplicações cliente simples, uma produtora e outra consumidora;
