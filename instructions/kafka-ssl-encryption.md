@@ -1,6 +1,6 @@
 # Kafka SSL Encryption Lab
 
-Esse laboratorio tem por objetivo exercitar a feature de encriptação do Kafka.
+Esse laboratorio tem por objetivo exercitar a feature de encriptação do Kafka.<br/>
 Nele vamos primeiramente testar as nossas aplicações clientes e constatar quanto inseguro é o tráfego de dados via texto puro.
 
 ## Fazendo o primeiro teste em plaintext
