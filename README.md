@@ -1,7 +1,7 @@
 # Kafka Security | Base Box
 
 Este projeto tem como objetivo exercitar as features de segurança do [Kafka](https://kafka.apache.org/).<br/>
-Normalmente são esperados três níveis de segurança: **encriptação**, **autenticação** e **autorização**.<br/>
+Normalmente são esperados três níveis de segurança: [**encriptação**](instructions/kafka-ssl-encryption.md), **autenticação** e **autorização**.<br/>
 Uma instalação inicial do Kafka não habilita qualquer nível de segurança. Portanto, é de responsabilidade do administrador do sistema habilitar tais recursos.<br/>
 Não é propósito deste laboratório substituir as documentações disponíveis sobre o tema. As mesmas são claras e objetivas e podem ser encontradas [aqui](https://kafka.apache.org/documentation/#security) e [aqui](https://docs.confluent.io/current/security.html).<br/>
 Com o laboratório pretendo simular um cenário onde há basicamente três atores (ou times):
