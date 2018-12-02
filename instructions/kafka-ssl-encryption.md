@@ -1,9 +1,11 @@
-###############################################
-## VM: kafka-client (vagrant ssh kafka-client)
-###############################################
+# Kafka SSL Encryption Lab
 
-## fazendo o primeiro teste em plaintext
-### Janela 1
+Esse laboratorio tem por objetivo exercitar a feature de encriptação do Kafka.
+Nele vamos primeiramente testar as nossas aplicações clientes e constatar quanto inseguro é o tráfego de dados via texto puro.
+
+## Fazendo o primeiro teste em plaintext
+
+#### Janela 1
 ```
 vagrant ssh kafka-client
 cd ~/kafka-producer
@@ -11,35 +13,39 @@ java -cp target/kafka-producer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github
 [Control + c]
 ```
 
-### Janela 2
+#### Janela 2
 ```
 vagrant ssh kafka-client
 cd ~/kafka-consumer
 java -cp target/kafka-consumer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.infobarbosa.kafka.PlaintextConsumer
 ```
 
-### Janela 3. Opcional. tcpdump na porta do servico para "escutar" o conteudo trafegado.
-### esse comando pode ser executado tanto na maquina do Kafka (kafka1) como na aplicacao cliente (kafka-client)
+#### Janela 3
+
+Executar um "tcpdump" para "escutar" o conteúdo trafegado.<br/>
+
+Esse comando pode ser executado tanto na máquina do Kafka (kafka1) como na aplicação cliente (kafka-client)
 ```
 vagrant ssh kafka-client
 sudo tcpdump -v -XX  -i enp0s8 -c 10
 sudo tcpdump -v -XX  -i enp0s8 -c 10 -w dump.txt
 ```
+Agora que vimos o quanto expostos estão nossos dados, é hora de fazer o setup pra resolver isso com encriptação. <br/>
 
-##################################
-## VM: kafka1 (vagrant ssh kafka1)
-##################################
+Abra outra janela e entre na máquina do Kafka:
 ```
 vagrant ssh kafka1
 ```
 
-### primeiro uma limpeza...
+### Primeiro uma limpeza...
+Assim como eu, você pode querer executar esse lab muitas e muitas vezes então é legal manter o diretório raiz limpo.
 ```
 rm /vagrant/cert-file
 rm /vagrant/cert-signed
+rm /vagrant/dump.txt
 ```
 
-### agora a geracao do certificado e da keystore
+### Gerando o certificado e a keystore
 ```
 export SRVPASS=serversecret
 mkdir ssl
@@ -48,43 +54,52 @@ cd ssl
 keytool -genkey -keystore kafka.server.keystore.jks -validity 365 -storepass $SRVPASS -keypass $SRVPASS  -dname "CN=kafka1.infobarbosa.github.com" -storetype pkcs12
 
 ls -latrh
-
+```
+Vamos checar o conteúdo da keystore
+```
 keytool -list -v -keystore kafka.server.keystore.jks -storepass $SRVPASS
 ```
 
-## criacao de um certification request file que serah assinado pela ca
+## Certification request
+
+É hora de criar o certification request file. Esse arquivo vamos enviar para a **autoridade certificadora (CA)** pra que seja assinado.
 ```
 keytool -keystore kafka.server.keystore.jks -certreq -file cert-file -storepass $SRVPASS -keypass $SRVPASS
 ```
 
-## Copiar o arquivo para o diretorio /vagrant onde pode ser acessado pela CA.
-### O diretorio /vagrant eh, na realidade, o diretorio raiz do projeto no host. Apenas foi compartilhado com a vm.
-### O que estamos fazendo aqui é emulando o envio da requisicao para o time de seguranca assinar o certificado.
+Pra simular o envio do arquivo para a CA, vamos copiar o arquivo **cert-file** para o diretorio **/vagrant** onde pode ser acessado pela CA.
+Observação: O diretório **/vagrant** é, na verdade, o diretório raiz do projeto no host. Apenas foi compartilhado com a vm.
 ```
 cp ~/ssl/cert-file /vagrant/
 ```
 
-##################################
-## VM: ca (vagran ssh ca)
-## Assinatura do certificado.
-## Input: /vagrant/cert-file
-## Output: /vagrant/cert-signed
-##################################
+## Assinatura do certificado
+
+Abra outro terminal e entre na máquina da autoridade certificadora:
 ```
 vagrant ssh ca
+```
+Verifique se o arquivo está acessível:
+```
+ls -ltrh /vagrant/cert-file
+```
+Tudo pronto! É hora de efetivamente assinar o certificado:
+
+```
 export SRVPASS=serversecret
 
 sudo openssl x509 -req -CA ~/ssl/ca-cert -CAkey ~/ssl/ca-key -in /vagrant/cert-file -out /vagrant/cert-signed -days 365 -CAcreateserial -passin pass:$SRVPASS
 ```
+Veja que o comando **openssl** recebe cert-file (**-in /vagrant/cert-file**) e devolve cert-signed (**/vagrant/cert-signed**) no mesmo diretório /vagrant.
 
-## copia a chave publica para /Vagrant
+## A chave pública da Autoridade Certificadora
+
+Para este setup também vamos precisar da chave pública divulgada pela CA, então aproveita que está na máquina da CA e copie este certificado para o diretório /vagrant de forma a ficar acessível para as máquinas do Kafka (kafka1) e aplicação cliente (kafka-client).
 ```
 cp ~/ssl/ca-cert /vagrant/
-
 ```
-############################################################################
+
 ## VM: kafka1 (vagrant ssh kafka1)
-############################################################################
 
 ## Checa o certificado assinado e importa para a truststore e keystore.
 ```
