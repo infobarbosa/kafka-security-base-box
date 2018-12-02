@@ -61,7 +61,7 @@ keytool -keystore kafka.server.keystore.jks -certreq -file cert-file -storepass 
 ### O diretorio /vagrant eh, na realidade, o diretorio raiz do projeto no host. Apenas foi compartilhado com a vm.
 ### O que estamos fazendo aqui é emulando o envio da requisicao para o time de seguranca assinar o certificado.
 ```
-cp cert-file /vagrant/
+cp ~/ssl/cert-file /vagrant/
 ```
 
 ##################################
