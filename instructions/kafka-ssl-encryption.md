@@ -1,7 +1,11 @@
 # Kafka SSL Encryption Lab
 
-Esse laboratorio tem por objetivo exercitar a feature de encriptação do Kafka.<br/>
-Nele vamos primeiramente testar as nossas aplicações clientes e constatar quanto inseguro é o tráfego de dados via texto puro.
+Esse laboratório tem por objetivo exercitar a feature de encriptação do Kafka. O conteúdo completo pode ser encontrado [aqui](https://github.com/infobarbosa/kafka-security-base-box).<br/>
+
+## Let's go!
+
+Vamos primeiramente testar as nossas aplicações clientes e constatar o quanto inseguro pode ser tráfego de dados quando o Kafka não habilita encriptação.<br/>
+
 
 Se ainda não tiver subido o laboratório, essa é a hora:
 ```
