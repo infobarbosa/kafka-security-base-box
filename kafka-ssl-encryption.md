@@ -23,7 +23,7 @@ java -cp target/kafka-consumer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github
 ```
 vagrant ssh kafka-client
 sudo tcpdump -v -XX  -i enp0s8 -c 10
-sudo tcpdump -v -XX  -i enp0s8 -w dump.txt
+sudo tcpdump -v -XX  -i enp0s8 -c 10 -w dump.txt
 ```
 
 ##################################
@@ -71,6 +71,7 @@ cp ~/ssl/cert-file /vagrant/
 ## Output: /vagrant/cert-signed
 ##################################
 ```
+vagrant ssh ca
 export SRVPASS=serversecret
 
 sudo openssl x509 -req -CA ~/ssl/ca-cert -CAkey ~/ssl/ca-key -in /vagrant/cert-file -out /vagrant/cert-signed -days 365 -CAcreateserial -passin pass:$SRVPASS
@@ -83,14 +84,16 @@ cp ~/ssl/ca-cert /vagrant/
 ```
 ############################################################################
 ## VM: kafka1 (vagrant ssh kafka1)
-## Checa o certificado assinado e importa para a truststore e keystore.
 ############################################################################
+
+## Checa o certificado assinado e importa para a truststore e keystore.
 ```
 keytool -printcert -v -file /vagrant/cert-signed
-keytool -list -v -keystore /home/vagrant/ssl/kafka.server.keystore.jks
+keytool -list -v -keystore /home/vagrant/ssl/kafka.server.keystore.jks -storepass $SRVPASS
 ```
 
-# Trust the CA by creating a truststore and importing the ca-cert
+# Criando a relacao de confianca com a CA.
+## Cria a trustore e importa o certificado da CA (ca-cert) nele.
 ```
 keytool -keystore kafka.server.truststore.jks -alias CARoot -import -file /vagrant/ca-cert -storepass $SRVPASS -keypass $SRVPASS -noprompt
 
@@ -101,8 +104,10 @@ keytool -keystore kafka.server.keystore.jks -alias CARoot -import -file /vagrant
 keytool -keystore kafka.server.keystore.jks -import -file /vagrant/cert-signed -storepass $SRVPASS -keypass $SRVPASS -noprompt
 ```
 
-# Ajustar as seguintes configuracoes do broker (alterar arquivo /etc/server.properties)
+# Ajustar as seguintes configuracoes do broker (alterar arquivo /etc/kafka/server.properties)
 ```
+vi /etc/kafka/server.properties
+
 listeners=PLAINTEXT://0.0.0.0:9092,SSL://0.0.0.0:9093
 advertised.listeners=PLAINTEXT://kafka1.infobarbosa.github.com:9092,SSL://kafka1.infobarbosa.github.com:9093
 
@@ -143,7 +148,7 @@ mkdir ssl
 cd ssl
 keytool -keystore kafka.client.truststore.jks -alias CARoot -import -file /vagrant/ca-cert  -storepass $CLIPASS -keypass $CLIPASS -noprompt
 
-keytool -list -v -keystore kafka.client.truststore.jks
+keytool -list -v -keystore kafka.client.truststore.jks -storepass $CLIPASS
 ```
 
 ## Abrir as classes SslProducer.java e SslConsumer.java e observar o uso das propriedades abaixo:
@@ -158,7 +163,7 @@ ssl.truststore.password=clientpass
 ## fazendo um segundo teste, já apontando para o kafka1 na porta 9093
 ### Janela 1
 ```
-cd ~/kafka-Producer
+cd ~/kafka-producer
 java -cp target/kafka-producer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.infobarbosa.kafka.SslProducer
 ```
 
@@ -169,7 +174,9 @@ java -cp target/kafka-consumer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github
 ```
 
 ### Janela 3. Opcional. tcpdump na porta do servico para "escutar" o conteudo trafegado.
-### esse comando pode ser executado tanto na maquina do Kafka (kafka1) como na aplicacao cliente (kafka-client)
+###     Esse comando pode ser executado tanto na maquina do Kafka (kafka1) como na aplicacao cliente (kafka-client)
+###     Atencao! enp0s8 eh a minha interface de rede utilizada para host-only.
+###     Se o comando nao funcionar entao teste quais interfaces estao funcionando via ifconfig ou tcpdump --list-interfaces
 ```
 sudo tcpdump -v -XX  -i enp0s8
 ```
