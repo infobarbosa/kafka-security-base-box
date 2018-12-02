@@ -3,16 +3,22 @@
 ########################################
 
 ## fazendo o primeiro teste em plaintext
-### na janela 1
+### Janela 1
 ```
 cd ~/kafka-Producer
 java -cp target/kafka-producer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.infobarbosa.kafka.PlaintextProducer
 ```
 
-### na janela 2
+### Janela 2
 ```
 cd ~/kafka-consumer
 java -cp target/kafka-consumer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.infobarbosa.kafka.PlaintextConsumer
+```
+
+### Janela 3. Opcional. tcpdump na porta do servico para "escutar" o conteudo trafegado.
+### esse comando pode ser executado tanto na maquina do Kafka (kafka1) como na aplicacao cliente (kafka-client)
+```
+sudo tcpdump -v -XX  -i enp0s8 -c 10
 ```
 
 ##################################
@@ -110,16 +116,15 @@ openssl s_client -connect 192.168.56.12:9093
 ## VM: kafka-client (vagrant ssh kafka-client)
 ############################################################################
 
-# Client configuration for using SSL
+# Configuracao SSL na aplicacao cliente
 
-## grab CA certificate from remote server and add it to local CLIENT truststore
+## geracao da truststore importando a chave publica da autoridade certificadora (CA)
 
 ```
 export CLIPASS=clientpass
 cd ~
 mkdir ssl
 cd ssl
-cp /vagrant/ca-cert .
 keytool -keystore kafka.client.truststore.jks -alias CARoot -import -file /vagrant/ca-cert  -storepass $CLIPASS -keypass $CLIPASS -noprompt
 
 keytool -list -v -keystore kafka.client.truststore.jks
@@ -135,14 +140,25 @@ ssl.truststore.password=clientpass
 
 ## TEST
 ## fazendo um segundo teste, já apontando para o kafka1 na porta 9093
-### na janela 1
+### Janela 1
 ```
 cd ~/kafka-Producer
 java -cp target/kafka-producer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.infobarbosa.kafka.SslProducer
 ```
 
-### na janela 2
+### Janela 2
 ```
 cd ~/kafka-consumer
 java -cp target/kafka-consumer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.infobarbosa.kafka.SslConsumer
+```
+
+### Janela 3. Opcional. tcpdump na porta do servico para "escutar" o conteudo trafegado.
+### esse comando pode ser executado tanto na maquina do Kafka (kafka1) como na aplicacao cliente (kafka-client)
+```
+sudo tcpdump -v -XX  -i enp0s8
+```
+### caso queira enviar o log para um arquivo para analisar melhor
+```
+sudo -i
+tcpdump -v -XX  -i enp0s8 -w dump.txt -c 10
 ```
