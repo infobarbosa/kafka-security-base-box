@@ -1,16 +1,19 @@
-########################################
-## VM: kafka-client (vagrant ssh kafka1)
-########################################
+###############################################
+## VM: kafka-client (vagrant ssh kafka-client)
+###############################################
 
 ## fazendo o primeiro teste em plaintext
 ### Janela 1
 ```
-cd ~/kafka-Producer
+vagrant ssh kafka-client
+cd ~/kafka-producer
 java -cp target/kafka-producer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.infobarbosa.kafka.PlaintextProducer
+[Control + c]
 ```
 
 ### Janela 2
 ```
+vagrant ssh kafka-client
 cd ~/kafka-consumer
 java -cp target/kafka-consumer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.infobarbosa.kafka.PlaintextConsumer
 ```
@@ -18,22 +21,35 @@ java -cp target/kafka-consumer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github
 ### Janela 3. Opcional. tcpdump na porta do servico para "escutar" o conteudo trafegado.
 ### esse comando pode ser executado tanto na maquina do Kafka (kafka1) como na aplicacao cliente (kafka-client)
 ```
+vagrant ssh kafka-client
 sudo tcpdump -v -XX  -i enp0s8 -c 10
+sudo tcpdump -v -XX  -i enp0s8 -w dump.txt
 ```
 
 ##################################
 ## VM: kafka1 (vagrant ssh kafka1)
 ##################################
 ```
+vagrant ssh kafka1
+```
+
+### primeiro uma limpeza...
+```
+rm /vagrant/cert-file
+rm /vagrant/cert-signed
+```
+
+### agora a geracao do certificado e da keystore
+```
 export SRVPASS=serversecret
 mkdir ssl
 cd ssl
-```
-## criacao do certificado e keystore
-```
+
 keytool -genkey -keystore kafka.server.keystore.jks -validity 365 -storepass $SRVPASS -keypass $SRVPASS  -dname "CN=kafka1.infobarbosa.github.com" -storetype pkcs12
 
-keytool -list -v -keystore kafka.server.keystore.jks
+ls -latrh
+
+keytool -list -v -keystore kafka.server.keystore.jks -storepass $SRVPASS
 ```
 
 ## criacao de um certification request file que serah assinado pela ca
@@ -42,8 +58,8 @@ keytool -keystore kafka.server.keystore.jks -certreq -file cert-file -storepass 
 ```
 
 ## Copiar o arquivo para o diretorio /vagrant onde pode ser acessado pela CA.
-### O diretorio /vagrant eh, na realizada, o diretorio raiz do projeto no
-### host compartilhado com a vm
+### O diretorio /vagrant eh, na realidade, o diretorio raiz do projeto no host. Apenas foi compartilhado com a vm.
+### O que estamos fazendo aqui é emulando o envio da requisicao para o time de seguranca assinar o certificado.
 ```
 cp cert-file /vagrant/
 ```
