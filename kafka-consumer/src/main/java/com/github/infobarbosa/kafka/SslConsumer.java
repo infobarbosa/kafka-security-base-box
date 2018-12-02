@@ -22,9 +22,10 @@ public class SslConsumer {
         properties.put(ConsumerConfig.CLIENT_ID_CONFIG, "consumer-tutorial");
         properties.put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, "100");
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, "consumer-tutorial-group");
-	properties.put("security.protocol", "SSL");
-	properties.put("ssl.truststore.location", "/home/vagrant/ssl/kafka.client.truststore.jks");
-	properties.put("ssl.truststore.password", "clientpass");
+        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        properties.put("security.protocol", "SSL");
+        properties.put("ssl.truststore.location", "/home/vagrant/ssl/kafka.client.truststore.jks");
+        properties.put("ssl.truststore.password", "clientpass");
 
         final String topic = "teste";
 

@@ -22,6 +22,7 @@ public class PlaintextConsumer {
         properties.put(ConsumerConfig.CLIENT_ID_CONFIG, "consumer-tutorial");
         properties.put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, "100");
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, "consumer-tutorial-group");
+        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         final String topic = "teste";
 
