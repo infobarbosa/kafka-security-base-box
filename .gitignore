@@ -10,3 +10,6 @@ cert-file
 cert-signed
 Kafka-Security-master
 code-v3.zip
+client-cert-sign-request
+client-cert-signed
+*.log.*.gz
