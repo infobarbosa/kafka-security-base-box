@@ -18,6 +18,7 @@ vagrant up
 ```
 vagrant ssh kafka-client
 cd ~/kafka-producer
+mvn clean package
 java -cp target/kafka-producer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.infobarbosa.kafka.PlaintextProducer
 [Control + c]
 ```
@@ -26,6 +27,7 @@ java -cp target/kafka-producer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github
 ```
 vagrant ssh kafka-client
 cd ~/kafka-consumer
+mvn clean package
 java -cp target/kafka-consumer-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.infobarbosa.kafka.PlaintextConsumer
 ```
 
@@ -37,7 +39,7 @@ Esse comando pode ser executado tanto na máquina do Kafka (kafka1) como na apli
 ```
 vagrant ssh kafka-client
 sudo tcpdump -v -XX  -i enp0s8 -c 10
-sudo tcpdump -v -XX  -i enp0s8 -c 10 -w dump.txt
+sudo tcpdump -v -XX  -i enp0s8 -c 100 -w dump.txt
 ```
 Agora que vimos o quanto expostos estão nossos dados, é hora de fazer o setup pra resolver isso com encriptação. <br/>
 
@@ -73,7 +75,7 @@ keytool -list -v -keystore kafka.server.keystore.jks -storepass $SRVPASS
 
 É hora de criar o certification request file. Esse arquivo vamos enviar para a **autoridade certificadora (CA)** pra que seja assinado.
 ```
-keytool -keystore kafka.server.keystore.jks -certreq -file cert-file -storepass $SRVPASS -keypass $SRVPASS
+keytool -keystore ~/ssl/kafka.server.keystore.jks -certreq -file /vagrant/cert-file -storepass $SRVPASS -keypass $SRVPASS
 ```
 
 Pra simular o envio do arquivo para a CA, vamos copiar o arquivo **cert-file** para o diretorio **/vagrant** onde pode ser acessado pela CA.<br/>
@@ -281,7 +283,7 @@ sudo tcpdump -v -XX  -i enp0s8
 Caso queira enviar o log para um arquivo para analisar melhor:
 ```
 sudo -i
-tcpdump -v -XX  -i enp0s8 -w dump.txt -c 100
+sudo tcpdump -v -XX  -i enp0s8 -w dump.txt -c 100
 ```
 
 Perceba que deixamos o broker respondendo na porta 9092 (plaintext).<br/>
