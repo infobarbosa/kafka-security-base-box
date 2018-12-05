@@ -27,7 +27,7 @@ keytool -genkey -keystore ~/ssl/kafka.client.keystore.jks -validity 365 -storepa
 keytool -list -v -keystore ~/ssl/kafka.client.keystore.jks -storepass $CLIPASS
 ```
 
-## Criação do request Vagrantfile
+## Criação do request file
 
 Crie o request file que será assinado pela CA
 ```
